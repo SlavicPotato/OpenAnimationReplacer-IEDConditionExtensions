@@ -1,4 +1,4 @@
-# OpenAnimationReplacer-ExamplePlugin
+# OpenAnimationReplacer-IEDConditionExtensions
 
 This is a SKSE64 plugin that lets OAR read data from IED and SDS via conditions.
 
@@ -8,8 +8,8 @@ This is a SKSE64 plugin that lets OAR read data from IED and SDS via conditions.
 
 ## Getting Started
 ```bat
-git clone https://github.com/ersh1/OpenAnimationReplacer-ExamplePlugin
-cd OpenAnimationReplacer-ExamplePlugin
+git clone https://github.com/SlavicPotato/OpenAnimationReplacer-IEDConditionExtensions
+cd OpenAnimationReplacer-IEDConditionExtensions
 ```
 
 ### Build
