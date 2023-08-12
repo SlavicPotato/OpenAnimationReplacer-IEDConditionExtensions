@@ -42,8 +42,7 @@ void RegisterCondition()
 		logs::info("Registered {} condition!", T::CONDITION_NAME);
 		break;
 	case OAR_API::Conditions::APIResult::AlreadyRegistered:
-		logs::warn("Condition {} is already registered!",
-			T::CONDITION_NAME);
+		logs::warn("Condition {} is already registered!", T::CONDITION_NAME);
 		break;
 	case OAR_API::Conditions::APIResult::Invalid:
 		logs::error("Condition {} is invalid!", T::CONDITION_NAME);
@@ -58,32 +57,30 @@ void InitMessaging()
 {
 	logs::trace("Initializing messaging listener...");
 	const auto intfc = SKSE::GetMessagingInterface();
-	if (!intfc->RegisterListener([](SKSE::MessagingInterface::Message* a_msg)
-		{
+	if (!intfc->RegisterListener([](SKSE::MessagingInterface::Message* a_msg) {
 			if (a_msg->type == SKSE::MessagingInterface::kPostPostLoad)
 			{
 				OAR_API::Conditions::GetAPI(OAR_API::Conditions::InterfaceVersion::V2);
 				if (g_oarConditionsInterface)
 				{
-					if (auto result = PluginInterfaceBase::query_interface<PluginInterfaceIED>()) {
+					if (auto result = PluginInterfaceBase::query_interface<PluginInterfaceIED>())
+					{
 						g_interfaceIED = result.intfc;
 						RegisterCondition<Conditions::IEDNodePlacementCondition>();
 						RegisterCondition<Conditions::IEDNodeParentNameCondition>();
 					}
-					else {
+					else
+					{
 						logs::error("Failed to query IED interface: {}"sv, PluginInterfaceIED::get_error_string(result.error));
 					}
 
-					if (auto result = PluginInterfaceBase::query_interface<PluginInterfaceSDS>()) {
-						if (auto intfcVer = result.intfc->GetInterfaceVersion(); intfcVer >= 2) {
-							g_interfaceSDS = result.intfc;
-							RegisterCondition<Conditions::SDSShieldOnBackEnabledCondition>();
-						}
-						else {
-							logs::error("SDS interface version too old (we require >= 2, got {})"sv, intfcVer);
-						}						
+					if (auto result = PluginInterfaceBase::query_interface<PluginInterfaceSDS>())
+					{
+						g_interfaceSDS = result.intfc;
+						RegisterCondition<Conditions::SDSShieldOnBackEnabledCondition>();
 					}
-					else {
+					else
+					{
 						logs::error("Failed to query SDS interface: {}"sv, PluginInterfaceSDS::get_error_string(result.error));
 					}
 				}
@@ -91,8 +88,6 @@ void InitMessaging()
 				{
 					logs::error("Failed to request Open Animation Replacer API"sv);
 				}
-
-				
 			}
 		}))
 	{

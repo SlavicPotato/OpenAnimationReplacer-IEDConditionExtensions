@@ -5,12 +5,12 @@
 
 enum class PluginInterfaceQueryErrorState : std::uint32_t
 {
-	kNone = 0,
-	kInvalidArgument = 1,
-	kDllNotLoaded = 2,
-	kEntryPointNotFound = 3,
+	kNone                = 0,
+	kInvalidArgument     = 1,
+	kDllNotLoaded        = 2,
+	kEntryPointNotFound  = 3,
 	kUniqueIDCheckFailed = 4,
-	kSuccess = 5
+	kSuccess             = 5
 };
 
 class PluginInterfaceBase
@@ -19,7 +19,7 @@ private:
 	template <class T>
 	struct query_result
 	{
-		T* intfc{ nullptr };
+		T*                             intfc{ nullptr };
 		PluginInterfaceQueryErrorState error{ PluginInterfaceQueryErrorState::kNone };
 
 		constexpr explicit operator bool() const noexcept
@@ -52,7 +52,7 @@ public:
 			return result;
 		}
 
-		using func_t = T * (*)();
+		using func_t = T* (*)();
 
 		func_t func = reinterpret_cast<func_t>(GetProcAddress(handle, "SKMP_GetPluginInterface"));
 
@@ -99,9 +99,9 @@ public:
 		}
 	}
 
-	virtual std::uint32_t GetPluginVersion() const = 0;
-	virtual const char* GetPluginName() const = 0;
+	virtual std::uint32_t GetPluginVersion() const    = 0;
+	virtual const char*   GetPluginName() const       = 0;
 	virtual std::uint32_t GetInterfaceVersion() const = 0;
-	virtual const char* GetInterfaceName() const = 0;
-	virtual std::uint64_t GetUniqueID() const = 0;
+	virtual const char*   GetInterfaceName() const    = 0;
+	virtual std::uint64_t GetUniqueID() const         = 0;
 };
