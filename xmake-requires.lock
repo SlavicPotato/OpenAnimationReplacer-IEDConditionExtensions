@@ -1,0 +1,47 @@
+{
+    __meta__ = {
+        version = "1.0"
+    },
+    ["windows|x64"] = {
+        ["cmake#31fecfc4"] = {
+            repo = {
+                branch = "master",
+                commit = "a723eaef7144dcd2eec359a171629c82a631882d",
+                url = "https://github.com/xmake-io/xmake-repo.git"
+            },
+            version = "3.26.4-msvc4"
+        },
+        ["commonlibsse-ng#dc79ba23"] = {
+            repo = {
+                branch = "master",
+                commit = "a723eaef7144dcd2eec359a171629c82a631882d",
+                url = "https://github.com/xmake-io/xmake-repo.git"
+            },
+            version = "v3.7.0"
+        },
+        ["fmt#31fecfc4"] = {
+            repo = {
+                branch = "master",
+                commit = "a723eaef7144dcd2eec359a171629c82a631882d",
+                url = "https://github.com/xmake-io/xmake-repo.git"
+            },
+            version = "10.0.0"
+        },
+        ["rapidcsv#31fecfc4"] = {
+            repo = {
+                branch = "master",
+                commit = "a723eaef7144dcd2eec359a171629c82a631882d",
+                url = "https://github.com/xmake-io/xmake-repo.git"
+            },
+            version = "8.50"
+        },
+        ["spdlog#b06e1130"] = {
+            repo = {
+                branch = "master",
+                commit = "a723eaef7144dcd2eec359a171629c82a631882d",
+                url = "https://github.com/xmake-io/xmake-repo.git"
+            },
+            version = "v1.11.0"
+        }
+    }
+}
