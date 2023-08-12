@@ -19,7 +19,7 @@ namespace Conditions
 		RE::BSString GetDescription() const override
 		{
 			return
-				"IED - gear node placement hint"sv
+				"Returns true if the gear node's current placement hint matches the 'Weapon placement ID' parameter according to the selected 'Comparison' operator. The gear node is specified by the 'Gear node ID' parameter."sv
 				.data();
 		}
 
@@ -51,7 +51,7 @@ namespace Conditions
 		RE::BSString GetDescription() const override
 		{
 			return
-				"IED - gear node parent name"sv
+				"Returns true if the gear node's current parent node name equals the text in 'Node name' parameter. The gear node is specified by the 'Gear node ID' parameter. Case insensitive."sv
 				.data();
 		}
 
@@ -78,7 +78,7 @@ namespace Conditions
 		RE::BSString GetDescription() const override
 		{
 			return
-				"Check if shield on back is enabled for this actor in Simple Dual Sheath."sv
+				"Returns true if shield on back is enabled for the actor in Simple Dual Sheath."sv
 				.data();
 		}
 
