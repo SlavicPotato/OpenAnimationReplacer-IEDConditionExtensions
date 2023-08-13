@@ -98,6 +98,38 @@ namespace Conditions
 		ITextConditionComponent*    matchTextComponent;
 	};
 
+	class IEDHasEquipmentSlot : public CustomCondition
+	{
+		using GearNodeID = PluginInterfaceIED::GearNodeID;
+
+	public:
+		constexpr static inline std::string_view CONDITION_NAME = "IED_HasEquipSlot"sv;
+
+		IEDHasEquipmentSlot();
+
+		RE::BSString GetName() const override { return CONDITION_NAME.data(); }
+
+		RE::BSString GetDescription() const override
+		{
+			return "Returns true if an item equipped in the target ref's hand has the specified equip slot configured."sv
+			    .data();
+		}
+
+		constexpr REL::Version GetRequiredVersion() const override { return { 1, 0, 0 }; }
+
+		RE::BSString GetArgument() const override;
+
+		RE::BSString GetCurrent(RE::TESObjectREFR* a_refr) const override;
+
+	protected:
+		bool EvaluateImpl(RE::TESObjectREFR* a_refr, RE::hkbClipGenerator* a_clipGenerator) const override;
+
+		static RE::BGSEquipSlot* GetEquipSlotForEquippedItem(RE::TESObjectREFR* a_refr, bool a_leftHand);
+
+		IBoolConditionComponent* isLeftHandComponent;
+		IFormConditionComponent* matchFormComponent;
+	};
+
 	class SDSShieldOnBackEnabledCondition : public CustomCondition
 	{
 	public:
@@ -107,7 +139,7 @@ namespace Conditions
 
 		RE::BSString GetDescription() const override
 		{
-			return "Returns true if shield on back is enabled for the actor in Simple Dual Sheath."sv
+			return "Returns true the target ref has shield on back enabled in Simple Dual Sheath."sv
 			    .data();
 		}
 

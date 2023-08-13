@@ -152,6 +152,78 @@ namespace Conditions
 		return parentName == matchTextComponent->GetTextValue();
 	}
 
+	IEDHasEquipmentSlot::IEDHasEquipmentSlot()
+	{
+		isLeftHandComponent = static_cast<IBoolConditionComponent*>(AddBaseComponent(
+			ConditionComponentType::kBool,
+			"Left hand"));
+		matchFormComponent  = static_cast<IFormConditionComponent*>(AddBaseComponent(
+            ConditionComponentType::kForm,
+            "Equipment slot"));
+	}
+
+	RE::BSString IEDHasEquipmentSlot::GetArgument() const
+	{
+		const auto isLeftHandArgument = isLeftHandComponent->GetArgument();
+		const auto formArgument       = matchFormComponent->GetArgument();
+
+		return std::format(
+				   "GetSlotForEquippedItem({}) == {}",
+				   isLeftHandArgument.data(),
+				   formArgument.data())
+		    .data();
+	}
+
+	RE::BSString IEDHasEquipmentSlot::GetCurrent(RE::TESObjectREFR* a_refr) const
+	{
+		if (a_refr)
+		{
+			const auto isLeftHand = isLeftHandComponent->GetBoolValue();
+			const auto equipSlot  = GetEquipSlotForEquippedItem(a_refr, isLeftHand);
+			return equipSlot ? std::format("{:X}", equipSlot->formID).data() : "";
+		}
+
+		return ""sv;
+	}
+
+	bool IEDHasEquipmentSlot::EvaluateImpl(
+		RE::TESObjectREFR*                     a_refr,
+		[[maybe_unused]] RE::hkbClipGenerator* a_clipGenerator)
+		const
+	{
+		const auto matchForm = matchFormComponent->GetTESFormValue();
+		if (!matchForm)
+		{
+			return false;
+		}
+
+		const auto isLeftHand = isLeftHandComponent->GetBoolValue();
+		const auto equipSlot  = GetEquipSlotForEquippedItem(a_refr, isLeftHand);
+
+		return equipSlot && equipSlot == matchForm;
+	}
+
+	RE::BGSEquipSlot* IEDHasEquipmentSlot::GetEquipSlotForEquippedItem(
+		RE::TESObjectREFR* a_refr,
+		bool               a_leftHand)
+	{
+		if (!a_refr)
+		{
+			return nullptr;
+		}
+
+		const auto actor = a_refr->As<RE::Actor>();
+		if (!actor)
+		{
+			return nullptr;
+		}
+
+		const auto equippedObject = actor->GetEquippedObject(a_leftHand);
+		const auto equipType      = equippedObject ? equippedObject->As<RE::BGSEquipType>() : nullptr;
+
+		return equipType ? equipType->equipSlot : nullptr;
+	}
+
 	RE::BSString SDSShieldOnBackEnabledCondition::GetArgument() const
 	{
 		return "IsShieldOnBackEnabled() == true"sv;
