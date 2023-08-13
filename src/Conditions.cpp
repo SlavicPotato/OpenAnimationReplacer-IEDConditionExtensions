@@ -180,7 +180,7 @@ namespace Conditions
 		{
 			const auto isLeftHand = isLeftHandComponent->GetBoolValue();
 			const auto equipSlot  = GetEquipSlotForEquippedItem(a_refr, isLeftHand);
-			return equipSlot ? std::format("{:X}", equipSlot->formID).data() : "";
+			return equipSlot ? std::format("0x{:X}", equipSlot->formID).data() : "";
 		}
 
 		return ""sv;
@@ -252,6 +252,55 @@ namespace Conditions
 	{
 		auto actor = a_refr ? a_refr->As<RE::Actor>() : nullptr;
 		return actor ? g_interfaceSDS->GetShieldOnBackEnabled(actor) : false;
+	}
+
+	IEDPluginOptionCondition::IEDPluginOptionCondition()
+	{
+		optionKeyComponent = static_cast<INumericConditionComponent*>(AddBaseComponent(
+			ConditionComponentType::kNumeric,
+			"Key"));
+
+		comparisonComponent = static_cast<IComparisonConditionComponent*>(AddBaseComponent(
+			ConditionComponentType::kComparison,
+			"Comparison"));
+
+		matchValueComponent = static_cast<INumericConditionComponent*>(AddBaseComponent(
+			ConditionComponentType::kNumeric,
+			"Match value"));
+	}
+
+	RE::BSString IEDPluginOptionCondition::GetArgument() const
+	{
+		const auto keyArgument        = optionKeyComponent->GetArgument();
+		const auto comparisonArgument = comparisonComponent->GetArgument();
+		const auto valueArgument      = matchValueComponent->GetArgument();
+
+		return std::format(
+				   "GetPluginOption({}) {} {}",
+				   keyArgument.data(),
+				   comparisonArgument.data(),
+				   valueArgument.data())
+		    .data();
+	}
+
+	RE::BSString IEDPluginOptionCondition::GetCurrent(RE::TESObjectREFR* a_refr) const
+	{
+		const auto key   = static_cast<PluginOptionKey>(optionKeyComponent->GetNumericValue(a_refr));
+		const auto value = g_interfaceIED->GetPluginOption(key);
+		return std::format("{}", static_cast<std::int32_t>(value)).data();
+	}
+
+	bool IEDPluginOptionCondition::EvaluateImpl(
+		RE::TESObjectREFR*                     a_refr,
+		[[maybe_unused]] RE::hkbClipGenerator* a_clipGenerator) const
+	{
+		const auto key        = static_cast<PluginOptionKey>(optionKeyComponent->GetNumericValue(a_refr));
+		const auto value      = g_interfaceIED->GetPluginOption(key);
+		const auto matchValue = static_cast<PluginOptionKey>(matchValueComponent->GetNumericValue(a_refr));
+
+		return comparisonComponent->GetComparisonResult(
+			static_cast<float>(value),
+			static_cast<float>(matchValue));
 	}
 
 }

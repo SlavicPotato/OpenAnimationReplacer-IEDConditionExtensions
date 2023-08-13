@@ -70,6 +70,7 @@ void InitMessaging()
 						RegisterCondition<Conditions::IEDNodeEquippedPlacementCondition>();
 						RegisterCondition<Conditions::IEDNodeParentNameCondition>();
 						RegisterCondition<Conditions::IEDHasEquipmentSlot>();
+						RegisterCondition<Conditions::IEDPluginOptionCondition>();
 					}
 					else
 					{

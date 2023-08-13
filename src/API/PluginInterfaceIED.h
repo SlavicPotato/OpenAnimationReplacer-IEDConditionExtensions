@@ -46,6 +46,12 @@ public:
 		kTwoHandedAxeMaceLeft = 18
 	};
 
+	enum class PluginOptionKey : std::uint32_t
+	{
+		kFrostfallAnimIdle = 0,
+		kFrostfallAnimAtk  = 1,
+	};
+
 	virtual std::uint32_t GetPluginVersion() const override;
 	virtual const char*   GetPluginName() const override;
 	virtual std::uint32_t GetInterfaceVersion() const override;
@@ -57,4 +63,5 @@ public:
 	virtual WeaponPlacementID GetPlacementHintForGearNode(RE::TESObjectREFR* a_actor, GearNodeID a_id) const;
 	virtual WeaponPlacementID GetPlacementHintForEquippedWeapon(RE::TESObjectREFR* a_refr, bool a_leftHand) const;
 	virtual RE::BSString      GetGearNodeParentName(RE::TESObjectREFR* a_refr, GearNodeID a_id) const;
+	virtual std::int32_t      GetPluginOption(PluginOptionKey a_key) const;
 };

@@ -50,7 +50,7 @@ namespace Conditions
 
 		RE::BSString GetDescription() const override
 		{
-			return "Same as IED_GearNodePlacementHint, except that it determines the gear node ID from an equipped weapon."sv
+			return "Same as IED_GearNodePlacementHint except that it determines the gear node from the equipped weapon type."sv
 			    .data();
 		}
 
@@ -100,8 +100,6 @@ namespace Conditions
 
 	class IEDHasEquipmentSlot : public CustomCondition
 	{
-		using GearNodeID = PluginInterfaceIED::GearNodeID;
-
 	public:
 		constexpr static inline std::string_view CONDITION_NAME = "IED_HasEquipSlot"sv;
 
@@ -128,6 +126,37 @@ namespace Conditions
 
 		IBoolConditionComponent* isLeftHandComponent;
 		IFormConditionComponent* matchFormComponent;
+	};
+
+	class IEDPluginOptionCondition : public CustomCondition
+	{
+		using PluginOptionKey = PluginInterfaceIED::PluginOptionKey;
+
+	public:
+		constexpr static inline std::string_view CONDITION_NAME = "IED_PluginOption"sv;
+
+		IEDPluginOptionCondition();
+
+		RE::BSString GetName() const override { return CONDITION_NAME.data(); }
+
+		RE::BSString GetDescription() const override
+		{
+			return ""sv
+			    .data();
+		}
+
+		constexpr REL::Version GetRequiredVersion() const override { return { 1, 0, 0 }; }
+
+		RE::BSString GetArgument() const override;
+
+		RE::BSString GetCurrent(RE::TESObjectREFR* a_refr) const override;
+
+	protected:
+		bool EvaluateImpl(RE::TESObjectREFR* a_refr, RE::hkbClipGenerator* a_clipGenerator) const override;
+
+		INumericConditionComponent*    optionKeyComponent;
+		IComparisonConditionComponent* comparisonComponent;
+		INumericConditionComponent*    matchValueComponent;
 	};
 
 	class SDSShieldOnBackEnabledCondition : public CustomCondition
