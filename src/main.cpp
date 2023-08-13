@@ -67,6 +67,7 @@ void InitMessaging()
 					{
 						g_interfaceIED = result.intfc;
 						RegisterCondition<Conditions::IEDNodePlacementCondition>();
+						RegisterCondition<Conditions::IEDNodeEquippedPlacementCondition>();
 						RegisterCondition<Conditions::IEDNodeParentNameCondition>();
 					}
 					else

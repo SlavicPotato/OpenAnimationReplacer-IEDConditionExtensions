@@ -36,6 +36,38 @@ namespace Conditions
 		INumericConditionComponent*    weaponPlacementIDComponent;
 	};
 
+	class IEDNodeEquippedPlacementCondition : public CustomCondition
+	{
+		using GearNodeID        = PluginInterfaceIED::GearNodeID;
+		using WeaponPlacementID = PluginInterfaceIED::WeaponPlacementID;
+
+	public:
+		constexpr static inline std::string_view CONDITION_NAME = "IED_GearNodeEquippedPlacementHint"sv;
+
+		IEDNodeEquippedPlacementCondition();
+
+		RE::BSString GetName() const override { return CONDITION_NAME.data(); }
+
+		RE::BSString GetDescription() const override
+		{
+			return "Same as IED_GearNodePlacementHint, except that it determines the gear node ID from an equipped weapon."sv
+			    .data();
+		}
+
+		constexpr REL::Version GetRequiredVersion() const override { return { 1, 0, 0 }; }
+
+		RE::BSString GetArgument() const override;
+
+		RE::BSString GetCurrent(RE::TESObjectREFR* a_refr) const override;
+
+	protected:
+		bool EvaluateImpl(RE::TESObjectREFR* a_refr, RE::hkbClipGenerator* a_clipGenerator) const override;
+
+		IBoolConditionComponent*       isLeftHandComponent;
+		IComparisonConditionComponent* comparisonComponent;
+		INumericConditionComponent*    weaponPlacementIDComponent;
+	};
+
 	class IEDNodeParentNameCondition : public CustomCondition
 	{
 		using GearNodeID = PluginInterfaceIED::GearNodeID;

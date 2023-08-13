@@ -57,6 +57,59 @@ namespace Conditions
 			static_cast<float>(valuePlacementID));
 	}
 
+	IEDNodeEquippedPlacementCondition::IEDNodeEquippedPlacementCondition()
+	{
+		isLeftHandComponent        = static_cast<IBoolConditionComponent*>(AddBaseComponent(
+            ConditionComponentType::kBool,
+            "Left hand"));
+		comparisonComponent        = static_cast<IComparisonConditionComponent*>(AddBaseComponent(
+            ConditionComponentType::kComparison,
+            "Comparison"));
+		weaponPlacementIDComponent = static_cast<INumericConditionComponent*>(AddBaseComponent(
+			ConditionComponentType::kNumeric,
+			"Weapon placement ID"));
+	}
+
+	RE::BSString IEDNodeEquippedPlacementCondition::GetArgument() const
+	{
+		const auto isLeftHandArgument        = isLeftHandComponent->GetArgument();
+		const auto comparisonArgument        = comparisonComponent->GetArgument();
+		const auto weaponPlacementIdArgument = weaponPlacementIDComponent->GetArgument();
+
+		return std::format(
+				   "GetPlacementHintForEquippedWeapon({}) {} {}",
+				   isLeftHandArgument.data(),
+				   comparisonArgument.data(),
+				   weaponPlacementIdArgument.data())
+		    .data();
+	}
+
+	RE::BSString IEDNodeEquippedPlacementCondition::GetCurrent(RE::TESObjectREFR* a_refr) const
+	{
+		if (a_refr)
+		{
+			const auto isLeftHand  = isLeftHandComponent->GetBoolValue();
+			const auto placementID = g_interfaceIED->GetPlacementHintForEquippedWeapon(a_refr, isLeftHand);
+			return std::to_string(stl::to_underlying(placementID)).data();
+		}
+
+		return ""sv;
+	}
+
+	bool IEDNodeEquippedPlacementCondition::EvaluateImpl(
+		RE::TESObjectREFR*                     a_refr,
+		[[maybe_unused]] RE::hkbClipGenerator* a_clipGenerator)
+		const
+	{
+		const auto isLeftHand       = isLeftHandComponent->GetBoolValue();
+		const auto placementID      = g_interfaceIED->GetPlacementHintForEquippedWeapon(a_refr, isLeftHand);
+		const auto valuePlacementID = static_cast<WeaponPlacementID>(weaponPlacementIDComponent->GetNumericValue(a_refr));
+
+		return comparisonComponent->GetComparisonResult(
+			static_cast<float>(placementID),
+			static_cast<float>(valuePlacementID));
+	}
+
 	IEDNodeParentNameCondition::IEDNodeParentNameCondition()
 	{
 		gearNodeIDComponent = static_cast<INumericConditionComponent*>(AddBaseComponent(

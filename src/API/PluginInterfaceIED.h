@@ -55,5 +55,6 @@ public:
 	//
 
 	virtual WeaponPlacementID GetPlacementHintForGearNode(RE::TESObjectREFR* a_actor, GearNodeID a_id) const;
+	virtual WeaponPlacementID GetPlacementHintForEquippedWeapon(RE::TESObjectREFR* a_refr, bool a_leftHand) const;
 	virtual RE::BSString      GetGearNodeParentName(RE::TESObjectREFR* a_refr, GearNodeID a_id) const;
 };
