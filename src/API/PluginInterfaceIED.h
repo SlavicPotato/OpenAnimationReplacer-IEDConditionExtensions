@@ -19,7 +19,6 @@ public:
 		AtHip       = 5,
 		Frostfall   = 6,
 		BowShoulder = 7,
-		AxeReverse  = 8,
 	};
 
 	enum class GearNodeID : std::uint32_t
