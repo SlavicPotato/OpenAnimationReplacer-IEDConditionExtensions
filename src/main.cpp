@@ -63,13 +63,14 @@ void InitMessaging()
 				OAR_API::Conditions::GetAPI(OAR_API::Conditions::InterfaceVersion::V2);
 				if (g_oarConditionsInterface)
 				{
+					RegisterCondition<Conditions::IEDHasEquipmentSlot>();
+
 					if (auto result = PluginInterfaceBase::query_interface<PluginInterfaceIED>())
 					{
 						g_interfaceIED = result.intfc;
 						RegisterCondition<Conditions::IEDNodePlacementCondition>();
 						RegisterCondition<Conditions::IEDNodeEquippedPlacementCondition>();
 						RegisterCondition<Conditions::IEDNodeParentNameCondition>();
-						RegisterCondition<Conditions::IEDHasEquipmentSlot>();
 						RegisterCondition<Conditions::IEDPluginOptionCondition>();
 					}
 					else
