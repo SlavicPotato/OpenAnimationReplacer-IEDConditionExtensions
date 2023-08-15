@@ -20,6 +20,7 @@ public:
 		Frostfall   = 6,
 		BowShoulder = 7,
 		Reverse     = 8,
+		Hand        = 9,
 	};
 
 	enum class GearNodeID : std::uint32_t
