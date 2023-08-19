@@ -64,6 +64,7 @@ void InitMessaging()
 				if (g_oarConditionsInterface)
 				{
 					RegisterCondition<Conditions::IEDHasEquipmentSlot>();
+					RegisterCondition<Conditions::IEDIsBoundWeaponEquipped>();
 
 					if (auto result = PluginInterfaceBase::query_interface<PluginInterfaceIED>())
 					{

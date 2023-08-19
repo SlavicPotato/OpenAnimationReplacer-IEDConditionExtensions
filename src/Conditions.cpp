@@ -207,12 +207,7 @@ namespace Conditions
 		RE::TESObjectREFR* a_refr,
 		bool               a_leftHand)
 	{
-		if (!a_refr)
-		{
-			return nullptr;
-		}
-
-		const auto actor = a_refr->As<RE::Actor>();
+		const auto actor = a_refr ? a_refr->As<RE::Actor>() : nullptr;
 		if (!actor)
 		{
 			return nullptr;
@@ -222,6 +217,58 @@ namespace Conditions
 		const auto equipType      = equippedObject ? equippedObject->As<RE::BGSEquipType>() : nullptr;
 
 		return equipType ? equipType->equipSlot : nullptr;
+	}
+
+	IEDIsBoundWeaponEquipped::IEDIsBoundWeaponEquipped()
+	{
+		isLeftHandComponent = static_cast<IBoolConditionComponent*>(AddBaseComponent(
+			ConditionComponentType::kBool,
+			"Left hand"));
+	}
+
+	RE::BSString IEDIsBoundWeaponEquipped::GetArgument() const
+	{
+		const auto isLeftHandArgument = isLeftHandComponent->GetArgument();
+
+		return std::format(
+				   "IsBoundWeaponEquipped({}) == true",
+				   isLeftHandArgument.data())
+		    .data();
+	}
+
+	RE::BSString IEDIsBoundWeaponEquipped::GetCurrent(RE::TESObjectREFR* a_refr) const
+	{
+		if (a_refr)
+		{
+			const auto isLeftHand = isLeftHandComponent->GetBoolValue();
+			return std::format("{}", isLeftHand).data();
+		}
+
+		return ""sv;
+	}
+
+	bool IEDIsBoundWeaponEquipped::EvaluateImpl(
+		RE::TESObjectREFR*                     a_refr,
+		[[maybe_unused]] RE::hkbClipGenerator* a_clipGenerator)
+		const
+	{
+		const auto isLeftHand = isLeftHandComponent->GetBoolValue();
+
+		return IsBoundWeaponEquipped(a_refr, isLeftHand);
+	}
+
+	bool IEDIsBoundWeaponEquipped::IsBoundWeaponEquipped(RE::TESObjectREFR* a_refr, bool a_leftHand)
+	{
+		const auto actor = a_refr ? a_refr->As<RE::Actor>() : nullptr;
+		if (!actor)
+		{
+			return false;
+		}
+
+		const auto equippedObject = actor->GetEquippedObject(a_leftHand);
+		const auto weapon         = equippedObject ? equippedObject->As<RE::TESObjectWEAP>() : nullptr;
+
+		return weapon && weapon->IsBound();
 	}
 
 	RE::BSString SDSShieldOnBackEnabledCondition::GetArgument() const

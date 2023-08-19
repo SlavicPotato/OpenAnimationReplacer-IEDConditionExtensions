@@ -127,6 +127,35 @@ namespace Conditions
 		IBoolConditionComponent* isLeftHandComponent;
 		IFormConditionComponent* matchFormComponent;
 	};
+	
+	class IEDIsBoundWeaponEquipped : public CustomCondition
+	{
+	public:
+		constexpr static inline std::string_view CONDITION_NAME = "IED_IsBoundWeaponEquipped"sv;
+
+		IEDIsBoundWeaponEquipped();
+
+		RE::BSString GetName() const override { return CONDITION_NAME.data(); }
+
+		RE::BSString GetDescription() const override
+		{
+			return "Checks if an item equipped in the target ref's hand is a bound weapon."sv
+			    .data();
+		}
+
+		constexpr REL::Version GetRequiredVersion() const override { return { 1, 0, 0 }; }
+
+		RE::BSString GetArgument() const override;
+
+		RE::BSString GetCurrent(RE::TESObjectREFR* a_refr) const override;
+
+	protected:
+		bool EvaluateImpl(RE::TESObjectREFR* a_refr, RE::hkbClipGenerator* a_clipGenerator) const override;
+
+		static bool IsBoundWeaponEquipped(RE::TESObjectREFR* a_refr, bool a_leftHand);
+
+		IBoolConditionComponent* isLeftHandComponent;
+	};
 
 	class IEDPluginOptionCondition : public CustomCondition
 	{
